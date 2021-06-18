@@ -4,7 +4,7 @@ public enum SortingField {
     DATE,
 
 
-    public final String sortByName{
+    public final String sortByName(){
 
     }
 
