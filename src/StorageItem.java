@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -5,6 +6,7 @@ public abstract class StorageItem implements Comparator<StorageItem> {
     private String name;
     private Date date;
     private int size;
+    private ArrayList<StorageItem> folder;
 
     public StorageItem(String name, int size) {
         this.name = name;
@@ -16,6 +18,8 @@ public abstract class StorageItem implements Comparator<StorageItem> {
         this.name = name;
         this.size = 0;
         this.date.setTime(Main.rnd.nextLong());
+        this.folder = new ArrayList<>();
+
     }
 
     public Date getDate() {
@@ -42,17 +46,31 @@ public abstract class StorageItem implements Comparator<StorageItem> {
     public abstract int getSize();
 
     public void printTree(SortingField field){
+        for(int i=0; i<
 
     }
 
-    @Override
-    public int compare(StorageItem o1, StorageItem o2) {
-        return Integer.compare(o1.getSize(), o2.getSize());
-    }
+ private void sortFolder(SortingField field, ArrayList<StorageItem> folder){
+        Comparator<StorageItem> compareName = Comparator.comparing((StorageItem::getName));
+        switch(field.toString()){
+            case "NAME":
+                folder.sort(compareName);
+                break;
+            case "SIZE":
+                Comparator<StorageItem> compareSize = Comparator.comparing((StorageItem::getSize));
+                Comparator<StorageItem> completeCompareSize = compareSize.thenComparing(compareName);
+                folder.sort(completeCompareSize);
+                break;
+            case "Date":
+                Comparator<StorageItem> compareDate = Comparator.comparing((StorageItem::getDate));
+                Comparator<StorageItem> completeCompareDate = compareDate.thenComparing(compareName);
+                folder.sort(completeCompareDate);
+                break;
+            default:
+                break;
+        }
 
-    public Date getComp(StorageItem o1, StorageItem o2) {
-        return Date.compare(o1.getDate(), o2.getSize());
-    }
+ }
 
 
 

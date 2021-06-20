@@ -1,15 +1,19 @@
 import java.util.ArrayList;
 
 public class Folder extends StorageItem {
-    private ArrayList<StorageItem> folder;
+
     private File file;
 
     public Folder(String name) {
         super(name);
-        this.folder = new ArrayList<>();
+        super.folder = new ArrayList<>();
         //check what to do with folder and file
     }
 
+
+    public ArrayList<StorageItem> getFolder() {
+        return folder;
+    }
 
     @Override
     public int getSize() {
