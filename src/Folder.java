@@ -20,16 +20,15 @@ public class Folder extends StorageItem {
         return totalSize;
     }
 
-    public boolean addItem(StorageItem item){
+    public boolean addItem(StorageItem item) {
         boolean add = true;
-        for (int i = 0; i < folder.size(); i++){
-            if(item.getName()==this.folder.get(i).getName()){
+        for (int i = 0; i < folder.size(); i++) {
+            if (item.getName() == this.folder.get(i).getName()) {
                 return false;
             }
-            if(folder.get(i) instanceof Folder){
-                (Folder)this.folder.get(i).addItem(item);
-            }
         }
+        this.folder.add(item);
+        return true;
     }
+    public File findFile(String path){
 }
-
