@@ -1,14 +1,28 @@
+import java.util.Comparator;
+import java.util.Date;
+
 public enum SortingField {
-    NAME,
-    SIZE,
-    DATE,
-
-
-    public final String sortByName(){
-
+    NAME {
+        @Override
+        public String toString() {
+            return "NAME";
+        }
+    },
+    SIZE {
+        @Override
+        public String toString() {
+            return "SIZE";
+        }
+    },
+    DATE{
+        @Override
+        public String toString() {
+            return "DATE";
+        }
     }
-
-
 }
+
+
+
 
 

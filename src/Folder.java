@@ -30,5 +30,30 @@ public class Folder extends StorageItem {
         this.folder.add(item);
         return true;
     }
-    public File findFile(String path){
+
+    public File findFile(String path) {  //probably doesnt work
+        String tempPath = "";
+        int counter = 0;
+        for (int i = 0; i < path.length(); i++) {
+            if (path.charAt(i) == '/') {
+                for (int j = 0; j < folder.size(); j++) {
+                    if (tempPath.equals(folder.get(j).getName())) {
+                        if (folder.get(j) instanceof Folder) {
+                            Folder folder1 = (Folder) folder.get(j);
+                            folder1.findFile(path.substring(counter));
+                        }
+                    }
+                }
+            } else {
+                tempPath += path.charAt(i);
+                counter++;
+            }
+        }
+        for (int i = 0; i < folder.size(); i++) {
+            if (path.equals(folder.get(i).getName())) {
+                return (File) folder.get(i);
+            }
+        }
+        return null;
+    }
 }

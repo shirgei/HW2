@@ -1,6 +1,7 @@
+import java.util.Comparator;
 import java.util.Date;
 
-public abstract class StorageItem {
+public abstract class StorageItem implements Comparator<StorageItem> {
     private String name;
     private Date date;
     private int size;
@@ -43,4 +44,16 @@ public abstract class StorageItem {
     public void printTree(SortingField field){
 
     }
+
+    @Override
+    public int compare(StorageItem o1, StorageItem o2) {
+        return Integer.compare(o1.getSize(), o2.getSize());
+    }
+
+    public Date getComp(StorageItem o1, StorageItem o2) {
+        return Date.compare(o1.getDate(), o2.getSize());
+    }
+
+
+
 }
