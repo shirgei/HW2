@@ -36,28 +36,43 @@ public class Folder extends StorageItem {
     }
 
     public File findFile(String path) {  //probably doesnt work
-        String tempPath = "";
+        String tempath = "";
         int counter = 0;
-        for (int i = 0; i < path.length(); i++) {
-            if (path.charAt(i) == '/') {
-                for (int j = 0; j < folder.size(); j++) {
-                    if (tempPath.equals(folder.get(j).getName())) {
-                        if (folder.get(j) instanceof Folder) {
+        boolean flage = false;
+        while (counter != path.length()){
+            if (path.charAt(counter) == '/' || path.length() == counter){
+                for (int j= 0 ; j< folder.size(); j++) {
+                    if (tempath.equals(folder.get(j).getName())) {
+                        flage = true;
+
+                        if (folder.get(j) instanceof Folder && flage == true) {
                             Folder folder1 = (Folder) folder.get(j);
-                            folder1.findFile(path.substring(counter));
+                            return folder1.findFile(path.substring(counter+1));
+                        }
+                        if (folder.get(j) instanceof File && tempath.equals(folder.get(j).getName())) {
+                            return (File) folder.get(j);
+                        } else {
+                            return null;
                         }
                     }
+                    }
+
                 }
-            } else {
-                tempPath += path.charAt(i);
-                counter++;
+            else{
+                tempath+= path.charAt(counter);
+            }
+            counter++;
+        }
+        for (int k= 0; k< folder.size(); k++){
+            if (tempath.equals(folder.get(k).getName())){
+                return (File) folder.get(k);
             }
         }
-        for (int i = 0; i < folder.size(); i++) {
-            if (path.equals(folder.get(i).getName())) {
-                return (File) folder.get(i);
-            }
-        }
+
         return null;
-    }
-}
+            }
+
+
+        }
+
+
