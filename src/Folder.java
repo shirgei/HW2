@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 public class Folder extends StorageItem {
-
     private File file;
+    private ArrayList<StorageItem> folder;
+
 
     public Folder(String name) {
         super(name);
-        super.folder = new ArrayList<>();
-        //check what to do with folder and file
+        this.folder = new ArrayList<>();
     }
 
 

@@ -2,11 +2,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
-public abstract class StorageItem implements Comparator<StorageItem> {
+public abstract class StorageItem {
     private String name;
     private Date date;
     private int size;
-    private ArrayList<StorageItem> folder;
 
     public StorageItem(String name, int size) {
         this.name = name;
@@ -17,8 +16,7 @@ public abstract class StorageItem implements Comparator<StorageItem> {
     public StorageItem(String name){
         this.name = name;
         this.size = 0;
-        this.date.setTime(Main.rnd.nextLong());
-        this.folder = new ArrayList<>();
+       // this.date.setTime(Main.rnd.nextLong());
 
     }
 
@@ -45,12 +43,63 @@ public abstract class StorageItem implements Comparator<StorageItem> {
 
     public abstract int getSize();
 
-    public void printTree(SortingField field){
-        for(int i=0; i<
-
+    public void printTree(SortingField field) {
+        if (this instanceof File) {
+            System.out.println(this.getName());
+        }
+        sortExternalFolder((Folder) this, field);
+        int indent = 0;
+        StringBuilder printString = new StringBuilder();
+        printDirectoryTree((Folder)this, indent, printString, field);
+        System.out.println(printString);
     }
 
- private void sortFolder(SortingField field, ArrayList<StorageItem> folder){
+
+    private void sortExternalFolder(Folder folder, SortingField field)
+    {
+        sortFolder(field, folder.getFolder());
+    }
+
+
+    private static String getIndentString(int indent) {
+        StringBuilder printString = new StringBuilder();
+        for (int i = 0; i < indent; i++) {
+            printString.append("|  ");
+        }
+        return printString.toString();
+    }
+
+    private static void printFile(File file, int indent,
+                                  StringBuilder printString) {
+        printString.append(getIndentString(indent));
+        printString.append(file.getName());
+        printString.append("\n");
+    }
+
+
+    public void printDirectoryTree(Folder folder, int indent,
+                                   StringBuilder printString,
+                                   SortingField field) {
+
+        printString.append(getIndentString(indent));
+        printString.append(folder.getName());
+        printString.append("\n");
+        for(int i = 0; i < folder.getFolder().size(); i++) {
+            if(folder.getFolder().get(i) instanceof Folder) {
+                sortFolder(field,
+                        ((Folder) folder.getFolder().get(i)).getFolder());
+                printDirectoryTree((Folder) folder.getFolder().get(i),
+                        indent + 1, printString, field);
+            }
+            else {
+                printFile((File) folder.getFolder().get(i),
+                        indent + 1, printString);
+            }
+
+        }
+    }
+
+    private void sortFolder(SortingField field, ArrayList<StorageItem> folder){
         Comparator<StorageItem> compareName = Comparator.comparing((StorageItem::getName));
         switch(field.toString()){
             case "NAME":
