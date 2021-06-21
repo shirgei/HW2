@@ -5,11 +5,14 @@ public class File extends StorageItem {
     public File(String name, String ext, int size) {
         super(name, size);
         this.ext = ext;
+        this.content="";
     }
 
     public File(String name, String ext) {
         super(name);
         this.ext = ext;
+        this.content="";
+
     }
 
     public String getName() {
