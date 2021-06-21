@@ -1,3 +1,6 @@
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,11 +16,35 @@ public abstract class StorageItem {
         this.date.setTime(Main.rnd.nextLong()); //check how to print
     }
 
+    public long dateToMillis(String strDate) {
+        long milliseconds = 0;
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        try {
+            Date date = dateFormat.parse(strDate);
+            milliseconds = date.getTime();
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return milliseconds;
+    }
+
+    private long abs(long number) {
+        if(number < 0)
+            return -number;
+        return number;
+    }
+
+
+
     public StorageItem(String name){
         this.name = name;
-        this.size = 0;
-       // this.date.setTime(Main.rnd.nextLong());
-
+        long startDate = dateToMillis("2017/01/01 00:00:00");
+        long endDate = dateToMillis("2021/12/31 23:59:59");
+        long rndLong =
+                (abs(Main.rnd.nextLong() % (endDate - startDate)) + startDate);
+        this.date = new Timestamp(rndLong);
     }
 
     public Date getDate() {
