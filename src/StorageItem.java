@@ -9,11 +9,13 @@ public abstract class StorageItem {
     private String name;
     private Date date;
     private int size;
+    private static int numOfFiles = 0;
+
 
     public StorageItem(String name, int size) {
         this.name = name;
         this.size = size;
-        this.date.setTime(Main.rnd.nextLong()); //check how to print
+        this.date.setTime(Main.rnd.nextLong());
     }
 
     public long dateToMillis(String strDate) {
@@ -70,15 +72,30 @@ public abstract class StorageItem {
 
     public abstract int getSize();
 
+    private int countAllFiles(Folder folder) {
+        int count = 0;
+        for(StorageItem item :folder.getFolder()) {
+            if(item instanceof File)
+                count++;
+            else
+                count += countAllFiles((Folder) item);
+        }
+        return count;
+    }
+
     public void printTree(SortingField field) {
         if (this instanceof File) {
             System.out.println(this.getName());
         }
         sortExternalFolder((Folder) this, field);
         int indent = 0;
+        numOfFiles = 0;
+        int allFiles = this.countAllFiles((Folder)this);
         StringBuilder printString = new StringBuilder();
-        printDirectoryTree((Folder)this, indent, printString, field);
+        printDirectoryTree((Folder)this, indent, printString, field,
+                allFiles);
         System.out.println(printString);
+
     }
 
 
@@ -91,7 +108,7 @@ public abstract class StorageItem {
     private static String getIndentString(int indent) {
         StringBuilder printString = new StringBuilder();
         for (int i = 0; i < indent; i++) {
-            printString.append("|  ");
+            printString.append("|    ");
         }
         return printString.toString();
     }
@@ -100,13 +117,12 @@ public abstract class StorageItem {
                                   StringBuilder printString) {
         printString.append(getIndentString(indent));
         printString.append(file.getName());
-        printString.append("\n");
     }
 
 
     public void printDirectoryTree(Folder folder, int indent,
                                    StringBuilder printString,
-                                   SortingField field) {
+                                   SortingField field, int allFiles) {
 
         printString.append(getIndentString(indent));
         printString.append(folder.getName());
@@ -116,15 +132,19 @@ public abstract class StorageItem {
                 sortFolder(field,
                         ((Folder) folder.getFolder().get(i)).getFolder());
                 printDirectoryTree((Folder) folder.getFolder().get(i),
-                        indent + 1, printString, field);
+                        indent + 1, printString, field, allFiles);
             }
             else {
                 printFile((File) folder.getFolder().get(i),
                         indent + 1, printString);
+               numOfFiles++;
+                if(numOfFiles < allFiles)
+                    printString.append("\n");
             }
 
         }
     }
+
 
     private void sortFolder(SortingField field, ArrayList<StorageItem> folder){
         Comparator<StorageItem> compareName = Comparator.comparing((StorageItem::getName));
@@ -137,7 +157,7 @@ public abstract class StorageItem {
                 Comparator<StorageItem> completeCompareSize = compareSize.thenComparing(compareName);
                 folder.sort(completeCompareSize);
                 break;
-            case "Date":
+            case "DATE":
                 Comparator<StorageItem> compareDate = Comparator.comparing((StorageItem::getDate));
                 Comparator<StorageItem> completeCompareDate = compareDate.thenComparing(compareName);
                 folder.sort(completeCompareDate);
